@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import type { TvShow } from './types'
+import { watchDebounced } from '@vueuse/core'
 
 export function useSearch() {
   const query = ref('')
@@ -8,8 +9,8 @@ export function useSearch() {
   const isSearching = ref(false)
   const error = ref<string | null>(null)
 
-  const searchShows = async () => {
-    if (!query.value.trim()) {
+  const searchShows = async (searchQuery = query.value) => {
+    if (!searchQuery.trim()) {
       results.value = []
       return
     }
@@ -19,7 +20,7 @@ export function useSearch() {
 
     try {
       const { data } = await axios.get<Array<{ show: TvShow }>>(
-        `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query.value)}`,
+        `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchQuery)}`,
       )
 
       // The API returns an array of objects with a show property
@@ -31,6 +32,15 @@ export function useSearch() {
       isSearching.value = false
     }
   }
+
+  // Use watchDebounced to watch query changes with debouncing
+  watchDebounced(
+    query,
+    (newQuery: string) => {
+      searchShows(newQuery)
+    },
+    { debounce: 300 },
+  )
 
   return {
     query,

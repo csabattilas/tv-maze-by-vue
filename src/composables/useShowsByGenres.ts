@@ -28,7 +28,6 @@ export function useShowsByGenres(): {
         })
       })
 
-      // sort by rating
       grouped.forEach((shows) => {
         shows.sort((a, b) => (b.rating?.average ?? 0) - (a.rating?.average ?? 0))
       })
