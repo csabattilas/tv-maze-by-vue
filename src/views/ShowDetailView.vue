@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useShowDetails } from '@composables/useShowDetails'
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import ResponsiveImage from '@components/ResponsiveImage.vue'
+import { PLACEHOLDER_IMAGE } from '@model/constants'
 
-// Get the show ID from the route params
 const props = defineProps<{
   id: string
 }>()
@@ -31,11 +32,12 @@ const { show, cast, isLoading, error } = useShowDetails(props.id)
 
   <div v-else-if="show" class="flex flex-col gap-8 max-w-7xl mx-auto">
     <div class="flex flex-col md:flex-row gap-6 md:gap-10">
-      <div class="relative md:w-96 flex-shrink-0">
-        <img
-          :src="show.image?.original || 'https://via.placeholder.com/500x750?text=No+Image'"
+      <div class="relative md:w-96 flex-shrink-0 rounded-lg shadow-md overflow-hidden">
+        <ResponsiveImage
+          :mobileSrc="show.image?.medium"
+          :desktopSrc="show.image?.original"
+          :fallbackSrc="PLACEHOLDER_IMAGE"
           :alt="show.name"
-          class="w-full rounded-lg shadow-md"
         />
         <div
           v-if="show.rating?.average"

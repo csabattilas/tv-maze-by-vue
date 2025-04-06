@@ -1,7 +1,6 @@
-// composables/useShowsByGenresGrouped.ts
 import { ref, onMounted, type Ref } from 'vue'
-import axios from 'axios'
-import type { TvShow } from './types'
+import type { TvShow } from '@model/tvMaze'
+import { tvMazeApi } from '@services/tvMazeApi'
 
 export function useShowsByGenres(): {
   genreMap: Ref<Map<string, TvShow[]>>
@@ -15,8 +14,7 @@ export function useShowsByGenres(): {
   const fetchShows = async () => {
     loading.value = true
     try {
-      // todo create a configuration file and use it
-      const { data } = await axios.get<TvShow[]>('https://api.tvmaze.com/shows')
+      const data = await tvMazeApi.getShows()
       const grouped = new Map<string, TvShow[]>()
 
       data.forEach((show) => {

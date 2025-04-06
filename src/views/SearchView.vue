@@ -2,6 +2,7 @@
 import { useSearch } from '@composables/useSearch'
 import ShowCard from '@components/ShowCard.vue'
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import LoadingSpinner from '@components/LoadingSpinner.vue'
 
 const { query, results, isSearching, error } = useSearch()
 </script>
@@ -21,18 +22,25 @@ const { query, results, isSearching, error } = useSearch()
       v-model="query"
       type="text"
       placeholder="Search for TV shows..."
-      class="flex-1 px-4 py-2 text-base sm:text-sm rounded-md"
+      class="flex-1 px-4 py-2 text-base text-gray-700 rounded-md"
     />
-    <div v-if="isSearching" class="ml-3 italic text-sm">Searching...</div>
   </div>
 
   <div v-if="error" class="p-4 mb-4 rounded-md text-center">
     {{ error }}
   </div>
 
-  <div v-else-if="isSearching" class="p-4 mb-4 text-center">Searching for shows...</div>
+  <div v-else-if="isSearching" class="p-4 mb-4 text-center">
+    <div class="flex justify-center items-center gap-2">
+      <span>Searching for shows...</span>
+      <LoadingSpinner />
+    </div>
+  </div>
 
-  <div v-else-if="results.length === 0 && query" class="p-4 mb-4 rounded-md text-center">
+  <div
+    v-else-if="results.length === 0 && query && query.trim().length >= 2"
+    class="p-4 mb-4 rounded-md text-center"
+  >
     No shows found matching "{{ query }}"
   </div>
 

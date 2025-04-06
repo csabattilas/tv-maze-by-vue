@@ -8,7 +8,7 @@
       <div
         v-for="(show, index) in shows"
         :key="show.id"
-        class="relative flex flex-none w-[150px] sm:w-[200px] md:w-[250px] snap-start"
+        class="relative flex flex-none w-[180px] md:w-[250px] snap-start"
       >
         <ShowCard :show="show" :rank="index + 1" class="w-full" />
       </div>

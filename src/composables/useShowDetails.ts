@@ -1,21 +1,6 @@
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
-import type { TvShow } from './types'
-
-interface CastMember {
-  person: {
-    id: number
-    name: string
-    image?: {
-      medium?: string
-      original?: string
-    }
-  }
-  character: {
-    id: number
-    name: string
-  }
-}
+import { tvMazeApi } from '@services/tvMazeApi'
+import type { TvShow, CastMember } from '@model/tvMaze'
 
 export function useShowDetails(showId: number | string) {
   const show = ref<TvShow | null>(null)
@@ -28,13 +13,8 @@ export function useShowDetails(showId: number | string) {
     error.value = null
 
     try {
-      const { data: showData } = await axios.get<TvShow>(`https://api.tvmaze.com/shows/${showId}`)
-      show.value = showData
-
-      const { data: castData } = await axios.get<CastMember[]>(
-        `https://api.tvmaze.com/shows/${showId}/cast`,
-      )
-      cast.value = castData
+      show.value = (await tvMazeApi.getShowById(Number(showId))) as TvShow
+      cast.value = (await tvMazeApi.getShowCast(Number(showId))) as CastMember[]
     } catch (e) {
       error.value = 'Failed to load show details'
       show.value = null

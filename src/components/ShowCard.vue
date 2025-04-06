@@ -1,12 +1,15 @@
 <template>
   <div
-    class="w-full rounded-lg overflow-hidden shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col"
+    class="w-full rounded-lg overflow-hidden shadow-md dark:shadow-sm dark:shadow-white hover:-translate-y-1 transition-all duration-200 flex flex-col"
   >
-    <div class="relative aspect-[260/300] rounded-t-lg overflow-hidden m-0 p-0 block">
-      <img
-        :src="show.image?.medium || 'https://via.placeholder.com/210x295?text=No+Image'"
+    <div
+      class="relative aspect-[260/300] rounded-t-lg overflow-hidden m-0 p-0 block bg-gray-100 dark:bg-gray-800"
+    >
+      <ResponsiveImage
+        :mobileSrc="show.image?.medium"
+        :desktopSrc="show.image?.original"
+        :fallbackSrc="PLACEHOLDER_IMAGE"
         :alt="show.name"
-        class="w-full h-full object-cover block m-0 p-0"
       />
       <div
         v-if="rank"
@@ -48,6 +51,8 @@
 <script setup lang="ts">
 import type { TvShow } from '@composables/types'
 import { InformationCircleIcon } from '@heroicons/vue/24/solid'
+import ResponsiveImage from './ResponsiveImage.vue'
+import { PLACEHOLDER_IMAGE } from '../model/constants'
 
 const props = defineProps<{
   show: TvShow

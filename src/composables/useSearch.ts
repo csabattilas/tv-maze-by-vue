@@ -1,7 +1,7 @@
 import { ref } from 'vue'
-import axios from 'axios'
-import type { TvShow } from './types'
 import { watchDebounced } from '@vueuse/core'
+import { tvMazeApi } from '@services/tvMazeApi'
+import type { TvShow } from '@model/tvMaze'
 
 export function useSearch() {
   const query = ref('')
@@ -10,7 +10,7 @@ export function useSearch() {
   const error = ref<string | null>(null)
 
   const searchShows = async (searchQuery = query.value) => {
-    if (!searchQuery.trim()) {
+    if (!searchQuery.trim() || searchQuery.trim().length < 2) {
       results.value = []
       return
     }
@@ -19,12 +19,7 @@ export function useSearch() {
     error.value = null
 
     try {
-      const { data } = await axios.get<Array<{ show: TvShow }>>(
-        `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchQuery)}`,
-      )
-
-      // The API returns an array of objects with a show property
-      results.value = data.map((item) => item.show)
+      results.value = (await tvMazeApi.searchShows(searchQuery)) as TvShow[]
     } catch (e) {
       error.value = 'Failed to search shows'
       results.value = []
@@ -33,7 +28,6 @@ export function useSearch() {
     }
   }
 
-  // Use watchDebounced to watch query changes with debouncing
   watchDebounced(
     query,
     (newQuery: string) => {

@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-screen flex flex-col w-full">
+  <div
+    class="min-h-screen flex flex-col w-full text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900"
+  >
     <header class="p-2 flex w-full justify-between items-center border-b mb-4">
       <h1 class="mb-0">
         <router-link to="/" class="transition-colors no-underline"> TV Maze by Vue </router-link>
@@ -11,20 +13,19 @@
       </nav>
     </header>
 
-    <main class="flex-1 max-w-7xl mx-auto w-full px-2 md:px-4">
+    <main class="flex-1 max-w-7xl mx-auto w-full px-2 md:px-4 mb-4">
       <slot></slot>
     </main>
 
-    <footer class="p-4 text-center mt-auto text-[0.625rem]">
+    <footer class="p-4 text-center mt-auto text-[0.625rem] border-t">
       <p>
         Powered by
-        <a href="http://www.tvmaze.com/api" target="_blank"> TVMaze API </a>
+        <a href="http://www.tvmaze.com/api" target="_blank" class="hover:underline"> TVMaze API </a>
       </p>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-// Main layout component for the application
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 </script>

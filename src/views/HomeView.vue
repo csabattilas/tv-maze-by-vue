@@ -1,11 +1,16 @@
 <template>
-  <div v-if="loading" class="text-center py-10 text-lg">Loading shows...</div>
+  <div v-if="loading" class="text-center py-10 text-lg">
+    <div class="flex justify-center items-center gap-2 mb-2">
+      <span> Loading shows please wait...</span>
+      <LoadingSpinner />
+    </div>
+  </div>
 
   <div v-else-if="error" class="text-center py-10 text-lg">
     {{ error }}
   </div>
 
-  <div v-else class="mb-10">
+  <div v-else class="mb-10 text-primary-700 dark:text-primary-300">
     <TopShowsSection :shows="topShows" />
     <GenreSection v-for="[genre, shows] in genres" :key="genre" :title="genre" :shows="shows" />
   </div>
@@ -14,6 +19,7 @@
 <script setup lang="ts">
 import GenreSection from '@components/GenreSection.vue'
 import TopShowsSection from '@components/TopShowsSection.vue'
+import LoadingSpinner from '@components/LoadingSpinner.vue'
 import { useShowsByGenres } from '@composables/useShowsByGenres'
 import { computed } from 'vue'
 import type { TvShow } from '@composables/types'
