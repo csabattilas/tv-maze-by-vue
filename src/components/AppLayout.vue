@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="min-h-screen flex flex-col w-full text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900"
-  >
+  <div class="min-h-screen flex flex-col w-full">
     <header class="p-2 flex w-full justify-between items-center border-b mb-4">
       <h1 class="mb-0">
         <router-link to="/" class="transition-colors no-underline"> TV Maze by Vue </router-link>

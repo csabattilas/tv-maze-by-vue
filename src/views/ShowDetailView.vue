@@ -41,7 +41,7 @@ const { show, cast, isLoading, error } = useShowDetails(props.id)
         />
         <div
           v-if="show.rating?.average"
-          class="absolute top-3 right-3 px-3 py-1.5 rounded text-white bg-primary-500"
+          class="absolute top-3 right-3 px-3 py-1.5 rounded text-white"
         >
           {{ show.rating.average.toFixed(1) }}
         </div>

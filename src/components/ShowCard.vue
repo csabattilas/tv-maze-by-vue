@@ -19,7 +19,7 @@
       </div>
       <div
         v-else-if="show.rating?.average"
-        class="absolute z-10 top-2 right-2 text-xs font-semibold text-white rounded p-1 opacity-80 bg-primary-500"
+        class="absolute z-10 top-2 right-2 text-xs font-semibold text-white bg-gray-800 rounded p-1 opacity-80"
       >
         {{ show.rating?.average?.toFixed(1) }}
       </div>
@@ -38,10 +38,10 @@
         </div>
         <router-link
           :to="`/show/${show.id}`"
-          class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-500 text-white transition-colors"
+          class="inline-flex items-center justify-center w-6 h-6 rounded-full transition-colors"
           title="View Details"
         >
-          <InformationCircleIcon class="w-5 h-5" />
+          <InformationCircleIcon class="w-6 h-6" />
         </router-link>
       </div>
     </div>
@@ -50,9 +50,9 @@
 
 <script setup lang="ts">
 import type { TvShow } from '@composables/types'
-import { InformationCircleIcon } from '@heroicons/vue/24/solid'
+import { InformationCircleIcon } from '@heroicons/vue/24/outline'
 import ResponsiveImage from './ResponsiveImage.vue'
-import { PLACEHOLDER_IMAGE } from '../model/constants'
+import { PLACEHOLDER_IMAGE } from '@model/constants'
 
 const props = defineProps<{
   show: TvShow

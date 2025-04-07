@@ -10,7 +10,7 @@
     {{ error }}
   </div>
 
-  <div v-else class="mb-10 text-primary-700 dark:text-primary-300">
+  <div v-else class="mb-10">
     <TopShowsSection :shows="topShows" />
     <GenreSection v-for="[genre, shows] in genres" :key="genre" :title="genre" :shows="shows" />
   </div>
