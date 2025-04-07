@@ -49,12 +49,12 @@
 </template>
 
 <script setup lang="ts">
-import type { TvShow } from '@composables/types'
+import type { TvShow } from '@model/tvMaze'
 import { InformationCircleIcon } from '@heroicons/vue/24/outline'
 import ResponsiveImage from './ResponsiveImage.vue'
 import { PLACEHOLDER_IMAGE } from '@model/constants'
 
-const props = defineProps<{
+defineProps<{
   show: TvShow
   rank?: number
 }>()

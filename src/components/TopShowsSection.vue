@@ -17,10 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import type { TvShow } from '@composables/types'
+import type { TvShow } from '@model/tvMaze'
 import ShowCard from './ShowCard.vue'
 
-const props = defineProps<{
+defineProps<{
   shows: TvShow[]
 }>()
 </script>

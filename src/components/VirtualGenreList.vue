@@ -21,11 +21,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, shallowRef, ref, watch, onMounted } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useVirtualList } from '@vueuse/core'
 import { useMediaQuery } from '@composables/useMediaQuery'
 import ShowCard from './ShowCard.vue'
-import type { TvShow } from '@composables/types'
+import type { TvShow } from '@model/tvMaze'
 
 const props = defineProps<{
   title: string

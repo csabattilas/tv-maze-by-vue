@@ -1,5 +1,5 @@
 declare module 'vue-router' {
-  import { RouteRecordRaw, Router, RouterOptions } from 'vue-router/dist/vue-router'
+  import { Router, RouterOptions } from 'vue-router/dist/vue-router'
   export * from 'vue-router/dist/vue-router'
   export function createRouter(options: RouterOptions): Router
   export function createWebHistory(base?: string): RouterHistory
@@ -12,6 +12,6 @@ declare module 'vue-router' {
     listen(callback: (to: string, from: string) => void): () => void
   }
   export interface HistoryState {
-    [key: string]: any
+    [key: string]: unknown
   }
 }

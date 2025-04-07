@@ -11,8 +11,8 @@ interface CachedItem<T> {
 
 interface Cache {
   shows: Map<string, CachedItem<TvShow[]>>
-  showDetails: Map<number, CachedItem<TvShow>>
-  showCast: Map<number, CachedItem<CastMember[]>>
+  showDetails: Map<string, CachedItem<TvShow>>
+  showCast: Map<string, CachedItem<CastMember[]>>
   searchResults: Map<string, CachedItem<TvShow[]>>
 }
 
@@ -66,7 +66,7 @@ export const tvMazeApi = {
    * Get show details by ID
    * @param id - Show ID
    */
-  getShowById: async (id: number): Promise<TvShow> => {
+  getShowById: async (id: string): Promise<TvShow> => {
     const cachedItem = cache.showDetails.get(id)
     if (cachedItem && isCacheValid(cachedItem)) {
       return cachedItem.data
@@ -91,7 +91,7 @@ export const tvMazeApi = {
    * Get cast for a show by ID
    * @param id - Show ID
    */
-  getShowCast: async (id: number): Promise<CastMember[]> => {
+  getShowCast: async (id: string): Promise<CastMember[]> => {
     const cachedItem = cache.showCast.get(id)
 
     if (cachedItem && isCacheValid(cachedItem)) {

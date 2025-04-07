@@ -8,13 +8,13 @@ export function useShowDetails() {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  const fetchShowDetails = async (showId: number | string) => {
+  const fetchShowDetails = async (showId: string) => {
     isLoading.value = true
     error.value = null
 
     try {
-      show.value = (await tvMazeApi.getShowById(Number(showId))) as TvShow
-      cast.value = (await tvMazeApi.getShowCast(Number(showId))) as CastMember[]
+      show.value = (await tvMazeApi.getShowById(showId)) as TvShow
+      cast.value = (await tvMazeApi.getShowCast(showId)) as CastMember[]
     } catch (e) {
       error.value = 'Failed to load show details'
       show.value = null

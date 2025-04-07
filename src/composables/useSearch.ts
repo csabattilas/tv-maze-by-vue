@@ -20,7 +20,7 @@ export function useSearch() {
 
     try {
       results.value = (await tvMazeApi.searchShows(searchQuery)) as TvShow[]
-    } catch (e) {
+    } catch {
       error.value = 'Failed to search shows'
       results.value = []
     } finally {
