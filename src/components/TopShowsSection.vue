@@ -1,4 +1,3 @@
-<!-- components/TopShowsSection.vue -->
 <template>
   <section class="mb-10">
     <h2 class="mb-2 mt-0">Top 10 Shows</h2>

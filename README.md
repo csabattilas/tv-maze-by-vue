@@ -126,3 +126,10 @@ The application is automatically deployed to Firebase Hosting via GitHub Actions
 2. Runs tests
 3. Builds the application
 4. Deploys to Firebase Hosting
+
+## Additional Future Improvements
+
+- **Accessibility Testing**: Add axe-core or similar tools for a11y compliance
+- **State Management**: Consider Pinia for more complex state requirements
+- **Internationalization**: Add i18n support for multiple languages
+- **More e2e tests**: Add more end-to-end tests for different scenarios

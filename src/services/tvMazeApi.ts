@@ -29,7 +29,7 @@ const isCacheValid = <T>(cachedItem: CachedItem<T>): boolean => {
 }
 
 /**
- * TVMaze API service functions
+ * TVMaze API service
  */
 export const tvMazeApi = {
   /**

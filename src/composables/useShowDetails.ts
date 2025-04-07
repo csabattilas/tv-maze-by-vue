@@ -15,7 +15,7 @@ export function useShowDetails() {
     try {
       show.value = (await tvMazeApi.getShowById(showId)) as TvShow
       cast.value = (await tvMazeApi.getShowCast(showId)) as CastMember[]
-    } catch (e) {
+    } catch {
       error.value = 'Failed to load show details'
       show.value = null
       cast.value = []
