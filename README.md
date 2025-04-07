@@ -1,18 +1,60 @@
-# tv-maze-by-vue
+# TV Maze by Vue
 
-This template should help get you started developing with Vue 3 in Vite.
+A Vue 3 application that displays TV shows data from the TVMaze API with optimized performance and responsive design.
 
-## Recommended IDE Setup
+## Features
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **TV Show Discovery**: Browse shows organized by genres
+  - **Genre Organization**: Shows categorized by genres for easy browsing
+  - **Trending Shows**: Highlights popular and trending content
+- **Search Functionality**: Find shows by title
+- **Show Details**: View comprehensive information about each show
 
-## Type Support for `.vue` Imports in TS
+## Key Technical Features
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- **Responsive Design**: Adapts to different screen sizes
+- **Virtual Scrolling**: Optimized performance for large lists
+- **Image Optimization**: Lazy loading and responsive images
+- **API Caching**: Efficient data fetching and storage
+- **Composable Architecture**: Reusable Vue composables
+- **Tailwind CSS**: Utility-first styling framework
+- **TypeScript**: Type-safe development experience
 
-## Customize configuration
+### Virtual Scrolling
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+The application uses VueUse's `useVirtualList` composable to implement efficient horizontal scrolling for TV show lists. Key optimizations include:
+
+- **Responsive Item Width**: Automatically adjusts item width based on screen size
+- **Smooth Scrolling**: CSS properties for fluid scrolling experience
+- **Efficient DOM Updates**: Only renders visible items for better performance
+- **Media Query Integration**: Uses custom `useMediaQuery` composable to respond to screen size changes
+
+### Composables
+
+The application uses several custom composables:
+
+- **useShowsData**: Manages fetching and organizing TV show data
+- **useShowDetails**: Manages fetching and organizing show details data
+- **useSearch**: Handles search functionality with debouncing
+- **useMediaQuery**: Provides reactive media query state
+
+### API Integration
+
+The TVMaze API service includes:
+
+- Efficient data fetching
+- Response caching to reduce API calls
+- Type-safe interfaces for API data
+
+### UI Framework
+
+The application uses Tailwind CSS for styling:
+
+- Utility-first approach for rapid UI development
+- Responsive classes for adapting to different screen sizes
+- Consistent design language across components
+- Custom utility classes for specific styling needs
+- Dark and light theme variants with automatic switching based on system preferences
 
 ## Project Setup
 
@@ -32,33 +74,28 @@ pnpm dev
 pnpm build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+## Performance Considerations
 
-```sh
-pnpm test:unit
-```
+### Virtual Scrolling
 
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
+The virtual scrolling implementation ensures high performance even with large lists of TV shows by:
 
-```sh
-# Install browsers for the first run
-npx playwright install
+1. Only rendering items that are visible in the viewport
+2. Implementing proper list recreation on media query changes
+3. Setting appropriate overscan values to prevent blank areas during scrolling
 
-# When testing on CI, must build the project first
-pnpm build
+### Image Loading
 
-# Runs the end-to-end tests
-pnpm test:e2e
-# Runs the tests only on Chromium
-pnpm test:e2e --project=chromium
-# Runs the tests of a specific file
-pnpm test:e2e tests/example.spec.ts
-# Runs the tests in debug mode
-pnpm test:e2e --debug
-```
+Images are optimized with:
 
-### Lint with [ESLint](https://eslint.org/)
+1. Lazy loading to defer loading until needed
+2. Responsive image selection based on device size
+3. Smooth loading transitions with loading indicators
 
-```sh
-pnpm lint
-```
+### API Caching
+
+The application reduces API calls by:
+
+1. Caching search results with appropriate expiration
+2. Using browser caching for images
+3. Efficiently organizing data to minimize duplicate fetches
