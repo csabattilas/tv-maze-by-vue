@@ -51,7 +51,3 @@ const { query, results, isSearching, error } = useSearch()
     <ShowCard v-for="show in results" :key="show.id" :show="show" />
   </div>
 </template>
-
-<style scoped>
-/* Add custom styles here if needed */
-</style>

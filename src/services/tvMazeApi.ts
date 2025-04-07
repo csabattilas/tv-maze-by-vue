@@ -1,29 +1,31 @@
 import axios from 'axios'
-import type { TvShow, CastMember } from '../model/tvMaze'
+import type { TvShow, CastMember } from '@model/tvMaze'
 
 const API_BASE_URL = 'https://api.tvmaze.com'
+const CACHE_EXPIRATION = 30 * 60 * 1000 // 30 minutes
 
-interface Cache {
-  shows: Map<string, TvShow[]>
-  showDetails: Map<number, TvShow>
-  showCast: Map<number, CastMember[]>
-  timestamp: Map<string, number>
+interface CachedItem<T> {
+  data: T
+  timestamp: number
 }
 
-const CACHE_EXPIRATION = 30 * 60 * 1000
+interface Cache {
+  shows: Map<string, CachedItem<TvShow[]>>
+  showDetails: Map<number, CachedItem<TvShow>>
+  showCast: Map<number, CachedItem<CastMember[]>>
+  searchResults: Map<string, CachedItem<TvShow[]>>
+}
 
 // simple memory cache to avoid unnecessary api calls
 const cache: Cache = {
   shows: new Map(),
   showDetails: new Map(),
   showCast: new Map(),
-  timestamp: new Map(),
+  searchResults: new Map(),
 }
 
-const isCacheValid = (key: string): boolean => {
-  const timestamp = cache.timestamp.get(key)
-  if (!timestamp) return false
-  return Date.now() - timestamp < CACHE_EXPIRATION
+const isCacheValid = <T>(cachedItem: CachedItem<T>): boolean => {
+  return Date.now() - cachedItem.timestamp < CACHE_EXPIRATION
 }
 
 /**
@@ -35,11 +37,25 @@ export const tvMazeApi = {
    * @param query - Search query
    */
   searchShows: async (query: string): Promise<TvShow[]> => {
+    const cacheKey = query.toLowerCase().trim()
+
+    const cachedItem = cache.searchResults.get(cacheKey)
+    if (cachedItem && isCacheValid(cachedItem)) {
+      return cachedItem.data
+    }
+
     try {
       const { data } = await axios.get<Array<{ show: TvShow }>>(
         `${API_BASE_URL}/search/shows?q=${encodeURIComponent(query)}`,
       )
-      return data.map((item) => item.show)
+      const results = data.map((item) => item.show)
+
+      cache.searchResults.set(cacheKey, {
+        data: results,
+        timestamp: Date.now(),
+      })
+
+      return results
     } catch (error) {
       console.error('Error searching shows:', error)
       throw new Error('Failed to search shows')
@@ -51,23 +67,23 @@ export const tvMazeApi = {
    * @param id - Show ID
    */
   getShowById: async (id: number): Promise<TvShow> => {
-    const cacheKey = `show_${id}`
-
-    if (cache.showDetails.has(id) && isCacheValid(cacheKey)) {
-      console.log(`Using cached data for show ${id}`)
-      return cache.showDetails.get(id)!
+    const cachedItem = cache.showDetails.get(id)
+    if (cachedItem && isCacheValid(cachedItem)) {
+      return cachedItem.data
     }
 
     try {
       const { data } = await axios.get<TvShow>(`${API_BASE_URL}/shows/${id}`)
 
-      cache.showDetails.set(id, data)
-      cache.timestamp.set(cacheKey, Date.now())
+      cache.showDetails.set(id, {
+        data,
+        timestamp: Date.now(),
+      })
 
       return data
     } catch (error) {
       console.error(`Error fetching show ${id}:`, error)
-      throw new Error('Failed to load show details')
+      throw new Error('Failed to fetch show details')
     }
   },
 
@@ -76,56 +92,60 @@ export const tvMazeApi = {
    * @param id - Show ID
    */
   getShowCast: async (id: number): Promise<CastMember[]> => {
-    const cacheKey = `cast_${id}`
+    const cachedItem = cache.showCast.get(id)
 
-    if (cache.showCast.has(id) && isCacheValid(cacheKey)) {
-      console.log(`Using cached data for cast of show ${id}`)
-      return cache.showCast.get(id)!
+    if (cachedItem && isCacheValid(cachedItem)) {
+      return cachedItem.data
     }
 
     try {
-      const { data } = await axios.get(`${API_BASE_URL}/shows/${id}/cast`)
+      const { data } = await axios.get<CastMember[]>(`${API_BASE_URL}/shows/${id}/cast`)
 
-      cache.showCast.set(id, data)
-      cache.timestamp.set(cacheKey, Date.now())
+      cache.showCast.set(id, {
+        data,
+        timestamp: Date.now(),
+      })
 
       return data
     } catch (error) {
       console.error(`Error fetching cast for show ${id}:`, error)
-      throw new Error('Failed to load cast details')
+      throw new Error('Failed to fetch show cast')
     }
   },
 
   /**
-   * Get shows
+   * Get all shows
    */
   getShows: async (): Promise<TvShow[]> => {
     const cacheKey = 'all_shows'
+    const cachedItem = cache.shows.get(cacheKey)
 
-    if (cache.shows.has(cacheKey) && isCacheValid(cacheKey)) {
-      console.log('Using cached data for all shows')
-      return cache.shows.get(cacheKey)!
+    if (cachedItem && isCacheValid(cachedItem)) {
+      return cachedItem.data
     }
 
     try {
       const { data } = await axios.get<TvShow[]>(`${API_BASE_URL}/shows`)
 
-      cache.shows.set(cacheKey, data)
-      cache.timestamp.set(cacheKey, Date.now())
+      cache.shows.set(cacheKey, {
+        data,
+        timestamp: Date.now(),
+      })
 
       return data
     } catch (error) {
-      console.error(`Error fetching shows:`, error)
-      throw new Error('Failed to load shows')
+      console.error('Error fetching shows:', error)
+      throw new Error('Failed to fetch shows')
     }
   },
 
-  // not used as on refresh the cache will reinitialise, but left for future use
-  clearCache: (): void => {
+  /**
+   * Clear all cached data
+   */
+  clearCache: () => {
     cache.shows.clear()
     cache.showDetails.clear()
     cache.showCast.clear()
-    cache.timestamp.clear()
-    console.log('Cache cleared')
+    cache.searchResults.clear()
   },
 }

@@ -3,12 +3,17 @@ import { useShowDetails } from '@composables/useShowDetails'
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import ResponsiveImage from '@components/ResponsiveImage.vue'
 import { PLACEHOLDER_IMAGE } from '@model/constants'
+import { onMounted } from 'vue'
 
 const props = defineProps<{
   id: string
 }>()
 
-const { show, cast, isLoading, error } = useShowDetails(props.id)
+const { show, cast, isLoading, error, fetchShowDetails } = useShowDetails()
+
+onMounted(() => {
+  fetchShowDetails(props.id)
+})
 </script>
 
 <template>

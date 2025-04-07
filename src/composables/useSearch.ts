@@ -41,6 +41,5 @@ export function useSearch() {
     results,
     isSearching,
     error,
-    searchShows,
   }
 }

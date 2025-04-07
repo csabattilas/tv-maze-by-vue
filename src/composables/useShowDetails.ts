@@ -1,14 +1,14 @@
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { tvMazeApi } from '@services/tvMazeApi'
 import type { TvShow, CastMember } from '@model/tvMaze'
 
-export function useShowDetails(showId: number | string) {
+export function useShowDetails() {
   const show = ref<TvShow | null>(null)
   const cast = ref<CastMember[]>([])
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  const fetchShowDetails = async () => {
+  const fetchShowDetails = async (showId: number | string) => {
     isLoading.value = true
     error.value = null
 
@@ -23,8 +23,6 @@ export function useShowDetails(showId: number | string) {
       isLoading.value = false
     }
   }
-
-  onMounted(fetchShowDetails)
 
   return {
     show,

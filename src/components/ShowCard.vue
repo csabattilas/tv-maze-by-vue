@@ -3,7 +3,7 @@
     class="w-full rounded-lg overflow-hidden shadow-md dark:shadow-sm dark:shadow-white hover:-translate-y-1 transition-all duration-200 flex flex-col"
   >
     <div
-      class="relative aspect-[260/300] rounded-t-lg overflow-hidden m-0 p-0 block bg-gray-100 dark:bg-gray-800"
+      class="relative aspect-[260/300] rounded-t-lg overflow-hidden block bg-gray-100 dark:bg-gray-800"
     >
       <ResponsiveImage
         :mobileSrc="show.image?.medium"
