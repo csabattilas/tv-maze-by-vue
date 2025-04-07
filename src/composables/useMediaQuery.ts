@@ -9,6 +9,7 @@ export function useMediaQuery(query: string) {
   }
 
   onMounted(() => {
+    //todo guard window on ssr
     mediaQuery = window.matchMedia(query)
     updateMatches(mediaQuery)
     mediaQuery.addEventListener('change', updateMatches)

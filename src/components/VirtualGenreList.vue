@@ -4,13 +4,14 @@
     <div
       v-bind="containerProps"
       class="relative overflow-x-auto scrollbar-hide flex overflow-y-visible py-2"
+      :style="{ scrollBehavior: 'smooth' }"
     >
       <div v-bind="wrapperProps" class="flex gap-2 md:gap-4">
         <div
           v-for="{ index, data } in list"
           :key="index"
           class="flex-shrink-0"
-          :class="{ 'w-[120px] md:w-[180px]': true }"
+          :style="{ width: `${virtualListOptions.itemWidth}px` }"
         >
           <ShowCard :show="data" />
         </div>
@@ -20,8 +21,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useVirtualList, useWindowSize } from '@vueuse/core'
+import { computed, shallowRef, ref, watch, onMounted } from 'vue'
+import { useVirtualList } from '@vueuse/core'
+import { useMediaQuery } from '@composables/useMediaQuery'
 import ShowCard from './ShowCard.vue'
 import type { TvShow } from '@composables/types'
 
@@ -30,17 +32,24 @@ const props = defineProps<{
   shows: TvShow[]
 }>()
 
-const { width } = useWindowSize()
+const { matches: isMobile } = useMediaQuery('(max-width: 768px)')
 
-// compute item width based on window size
-const itemWidth = computed(() => {
-  return width.value < 768 ? 120 + 4 : 180 + 8
+const virtualListOptions = ref({
+  itemWidth: isMobile.value ? 124 : 188,
+  overscan: 10,
 })
 
-const { list, containerProps, wrapperProps } = useVirtualList(props.shows, {
-  itemWidth: itemWidth.value,
-  overscan: 5,
+watch(isMobile, () => {
+  virtualListOptions.value = {
+    itemWidth: isMobile.value ? 124 : 188,
+    overscan: 10,
+  }
 })
+
+const sourceList = computed(() => props.shows)
+
+// the virtual list is still snappy, but let's park it for now
+const { list, containerProps, wrapperProps } = useVirtualList(sourceList, virtualListOptions.value)
 </script>
 
 <style scoped>
@@ -50,5 +59,8 @@ const { list, containerProps, wrapperProps } = useVirtualList(props.shows, {
 
 .scrollbar-hide {
   scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
+  scroll-behavior: smooth;
 }
 </style>
