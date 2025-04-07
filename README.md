@@ -74,6 +74,18 @@ pnpm dev
 pnpm build
 ```
 
+### Run Unit Tests
+
+```sh
+pnpm test
+```
+
+### Run E2E Tests
+
+```sh
+pnpm e2e
+```
+
 ## Performance Considerations
 
 ### Virtual Scrolling
@@ -99,3 +111,18 @@ The application reduces API calls by:
 1. Caching search results with appropriate expiration
 2. Using browser caching for images
 3. Efficiently organizing data to minimize duplicate fetches
+
+## Deployment
+
+The application is deployed to Firebase and can be accessed at:
+
+**Live Demo**: [https://tvmaze-8f5d0.web.app/](https://tvmaze-8f5d0.web.app/)
+
+### Deployment Process
+
+The application is automatically deployed to Firebase Hosting via GitHub Actions when changes are pushed to the main branch. The deployment workflow:
+
+1. Installs dependencies
+2. Runs tests
+3. Builds the application
+4. Deploys to Firebase Hosting
